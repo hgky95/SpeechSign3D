@@ -1,7 +1,56 @@
 import speech_recognition as sr
+from PIL import Image
 
 ENGLISH_TEXT_OUTPUT_PATH = "output/speech_to_english.txt"
 
+
+def text_to_asl(text, image_folder, output_image):
+    """
+    Convert English text to ASL using corresponding images.
+
+    Args:
+        text (str): The English text to be converted.
+        image_folder (str): Folder containing ASL images (e.g., "a.jpg", "b.jpg", etc.).
+        output_image (str): Path to save the generated ASL output image.
+    """
+    text = text.lower()  # Convert text to lowercase to match image filenames
+    images = []
+
+    for char in text:
+        if char.isalpha():  # Only process alphabetic characters
+            image_path = f"{image_folder}/{char}.png"
+            try:
+                img = Image.open(image_path)
+                images.append(img)
+            except FileNotFoundError:
+                print(f"Image for '{char}' not found in {image_folder}.")
+        elif char == " ":  # Add a gap for spaces
+            images.append(None)  # Represent a space with None
+
+    # Combine images into one strip
+    if not images:
+        print("No valid characters found in the text.")
+        return
+
+    # Calculate the total width and maximum height of the output image
+    total_width = sum(img.width if img else 50 for img in images)  # 50px gap for spaces
+    max_height = max(img.height if img else 0 for img in images)
+
+    # Create a new blank image for the result
+    result = Image.new("RGB", (total_width, max_height), (255, 255, 255))
+
+    # Paste images onto the result image
+    x_offset = 0
+    for img in images:
+        if img:
+            result.paste(img, (x_offset, 0))
+            x_offset += img.width
+        else:  # Add space for gaps
+            x_offset += 50
+
+    # Save the result image
+    result.save(output_image)
+    print(f"ASL image saved as: {output_image}")
 
 def speech_to_text(audio_path):
     """
@@ -61,4 +110,10 @@ def write_to_file(content, filename):
 
 
 if __name__ == '__main__':
-    speech_to_text("./input/Winter_is_coming_speech.wav")
+    # speech_to_text("./input/Winter_is_coming_speech.wav")
+    # Example usage
+    text_to_asl(
+        text="Hello World",
+        image_folder="letters",  # Replace with your folder path containing the images
+        output_image="output/output.jpg"
+    )
