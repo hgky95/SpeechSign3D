@@ -110,10 +110,10 @@ def write_to_file(content, filename):
 
 
 if __name__ == '__main__':
-    # speech_to_text("./input/Winter_is_coming_speech.wav")
-    # Example usage
+    output_path = speech_to_text("./input/winter_is_coming.wav")
+    english_text = read_text_file(output_path)
     text_to_asl(
-        text="Hello World",
-        image_folder="letters",  # Replace with your folder path containing the images
+        text=english_text,
+        image_folder="letters",
         output_image="output/output.jpg"
     )
