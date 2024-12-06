@@ -43,9 +43,11 @@ python main.py
 ```
 
 Result: converting Speech to ASL image:
+
 ![output](https://github.com/user-attachments/assets/973a1375-7a67-40b6-aaa1-8d63ba1e89cb)
 
 Result: converting Speech to 3D model:
+
 ![1](https://github.com/user-attachments/assets/a8546ed5-1343-444e-93ec-f01def2250a2)
 
 
